@@ -7,8 +7,8 @@ from common import get_ext_from_url
 
 
 def fetch_spacex_launch(id):
-    img_folder = Path("spacex")
-    img_folder.mkdir(exist_ok=True)
+    img_folder = Path("images/spacex")
+    img_folder.mkdir(parents=True, exist_ok=True)
 
     url = f"https://api.spacexdata.com/v5/launches/{id}"
     response = requests.get(url)

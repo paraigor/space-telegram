@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 
 
 def fetch_nasa_epic(token, n):
-    img_folder = Path("nasa")
-    img_folder.mkdir(exist_ok=True)
+    img_folder = Path("images/nasa")
+    img_folder.mkdir(parents=True, exist_ok=True)
 
     payload = {"api_key": token}
     request_url = "https://api.nasa.gov/EPIC/api/natural/images/"
