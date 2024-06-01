@@ -1,4 +1,4 @@
-# Images of space publisher
+# Space Telegram
 
 A set of scripts for downloading various images from NASA database, using NASA Open APIs, SpaceX database, and automatically publishing them to Telegram channel.
 
@@ -16,7 +16,7 @@ Security sensitive information recommended storing in the project using `.env` f
 
 Key name to store token value is `NASA_API_TOKEN`.
 
-### Using
+### Usage
 
 `main.py` script is used for automated publishing of downloaded images to Telegram channel.  
 Set Telegram channel ID in `config.ini`:
