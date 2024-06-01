@@ -24,10 +24,12 @@ Set Telegram channel ID in `config.ini`:
 [Telegram]
 CHANNEL_ID = @chat_id
 ```
-and pass publishing frequency in hours as an argument:
+and pass specific image file name or 'all' for all downloaded images:
 ```
-python main.py 4
+python main.py nasa001.jpg
+python main.py all
 ```
+If no arguments provided, one random image will be published.
 
 `fetch_apod_images.py` script is used for downloading images from NASA Astronomy Picture of the Day Archive.  
 Number of desired images can be passed as an argument:
