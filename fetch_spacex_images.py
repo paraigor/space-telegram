@@ -3,30 +3,29 @@ from pathlib import Path
 
 import requests
 
-from common import get_ext_from_url
+from common import download_image, get_ext_from_url
 
 
-def fetch_spacex_launch(id):
+def fetch_spacex_launch(launch_id):
     img_folder = Path("images/spacex")
     img_folder.mkdir(parents=True, exist_ok=True)
 
-    url = f"https://api.spacexdata.com/v5/launches/{id}"
+    url = f"https://api.spacexdata.com/v5/launches/{launch_id}"
     response = requests.get(url)
     response.raise_for_status()
     images = response.json()["links"]["flickr"]["original"]
 
-    for num, link in enumerate(images):
-        img_filename = f"spacex{num:03}{get_ext_from_url(link)}"
+    for i, img_link in enumerate(images):
+        img_filename = f"spacex{i:03}{get_ext_from_url(img_link)}"
         img_path = img_folder.joinpath(img_filename)
-        response = requests.get(link)
-        response.raise_for_status()
-
-        with open(img_path, "wb") as file:
-            file.write(response.content)
+        download_image(img_link, img_path)
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="""Script for downloading images from SpaceX
+                         shuttles launches"""
+    )
     parser.add_argument(
         "launch_id",
         nargs="?",

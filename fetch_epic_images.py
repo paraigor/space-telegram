@@ -6,8 +6,10 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
+from common import download_image
 
-def fetch_nasa_epic(token, n):
+
+def fetch_nasa_epic(token, qty):
     img_folder = Path("images/nasa")
     img_folder.mkdir(parents=True, exist_ok=True)
 
@@ -17,36 +19,36 @@ def fetch_nasa_epic(token, n):
     response.raise_for_status()
     images = response.json()
 
-    for num, item in enumerate(images[:n]):
-        img_name = item["image"]
-        img_date = datetime.strptime(item["date"], "%Y-%m-%d %H:%M:%S")
+    for i, image in enumerate(images[:qty]):
+        img_name = image["image"]
+        img_date = datetime.strptime(image["date"], "%Y-%m-%d %H:%M:%S")
         img_url = "https://api.nasa.gov/EPIC/archive/natural/"
         img_url += f"{img_date.year}/{img_date.month:02}/{img_date.day}"
         img_url += f"/png/{img_name}.png"
 
-        img_filename = f"nasa_epic{num:03}.png"
+        img_filename = f"nasa_epic{i:03}.png"
         img_path = img_folder.joinpath(img_filename)
-        response = requests.get(img_url, params=payload)
-        response.raise_for_status()
-
-        with open(img_path, "wb") as file:
-            file.write(response.content)
+        download_image(img_url, img_path, payload=payload)
 
 
 def main():
     load_dotenv()
     nasa_token = os.environ["NASA_API_TOKEN"]
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="""Script for downloading images of our planet from
+                         NASA EPIC Archive"""
+        )
     parser.add_argument(
         "n",
+        type=int,
         nargs="?",
-        default="3",
+        default=3,
         help="Number of images to fetch, default 3",
     )
     args = parser.parse_args()
 
-    fetch_nasa_epic(nasa_token, int(args.n))
+    fetch_nasa_epic(nasa_token, args.n)
 
 
 if __name__ == "__main__":
