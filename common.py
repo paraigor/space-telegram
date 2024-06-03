@@ -9,7 +9,7 @@ def get_ext_from_url(url):
     return Path(file_name).suffix
 
 
-def download_image(link, img_path, payload={}):
+def download_image(link, img_path, payload=None):
     response = requests.get(link, params=payload)
     response.raise_for_status()
 

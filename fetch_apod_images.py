@@ -1,5 +1,6 @@
 import argparse
 import os
+from contextlib import suppress
 from pathlib import Path
 
 import requests
@@ -21,17 +22,15 @@ def fetch_nasa_apod(token, qty):
     response.raise_for_status()
     images = response.json()
 
-    for i, img_link in enumerate(images):
+    for number, img_link in enumerate(images):
         if img_link["media_type"] != "image":
             continue
 
         link = img_link["url"]
-        img_filename = f"nasa{i:03}{get_ext_from_url(link)}"
+        img_filename = f"nasa{number:03}{get_ext_from_url(link)}"
         img_path = img_folder.joinpath(img_filename)
-        try:
+        with suppress(requests.exceptions.HTTPError):
             download_image(link, img_path)
-        except requests.exceptions.HTTPError:
-            continue
 
 
 def main():

@@ -19,14 +19,14 @@ def fetch_nasa_epic(token, qty):
     response.raise_for_status()
     images = response.json()
 
-    for i, image in enumerate(images[:qty]):
+    for number, image in enumerate(images[:qty]):
         img_name = image["image"]
         img_date = datetime.strptime(image["date"], "%Y-%m-%d %H:%M:%S")
         img_url = "https://api.nasa.gov/EPIC/archive/natural/"
-        img_url += f"{img_date.year}/{img_date.month:02}/{img_date.day}"
+        img_url += f"{img_date.year}/{img_date.month:02}/{img_date.day:02}"
         img_url += f"/png/{img_name}.png"
 
-        img_filename = f"nasa_epic{i:03}.png"
+        img_filename = f"nasa_epic{number:03}.png"
         img_path = img_folder.joinpath(img_filename)
         download_image(img_url, img_path, payload=payload)
 
